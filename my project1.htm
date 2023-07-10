@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telugu Film Industry Dashboard</title>
+    <style>
+        /* CSS styles */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #searchButton {
+            padding: 10px 20px;
+            margin-left: 10px;
+        }
+
+        #artistsContainer {
+            margin-top: 20px;
+        }
+
+        .artist-profile {
+            margin-bottom: 20px;
+            display: none; /* Initially hide the profiles */
+        }
+
+        .artist-profile.show {
+            display: block; /* Display the profiles when shown */
+        }
+
+        .artist-profile h3 {
+            margin-bottom: 5px;
+        }
+
+        .artist-profile p {
+            margin: 0;
+        }
+
+        .artist-profile a {
+            color: #0366d6;
+        }
+
+        #notFoundMessage {
+            display: none; /* Initially hide the "Data not found" message */
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Telugu Film Industry Dashboard</h1>
+        <div>
+            <input type="text" id="searchInput" placeholder="Search artists">
+            <button id="searchButton" onclick="searchData()">Search</button>
+        </div>
+        <div id="artistsContainer"></div>
+        <p id="notFoundMessage">Data not found</p>
+    </div>
+
+    <script>
+        // JavaScript code
+        const artists = [
+            // Heroes
+            {
+                id: 1,
+                category: 'Heroes',
+                name: 'Mahesh Babu',
+                firstMovie: 'Raja Kumarudu',
+                age: 46,
+                wikipedia: 'https://en.wikipedia.org/wiki/Mahesh_Babu',
+                instagram: 'https://www.instagram.com/urstrulymahesh/'
+            },
+            {
+                id: 2,
+                category: 'Heroes',
+                name: 'Allu Arjun',
+                firstMovie: 'Gangotri',
+                age: 38,
+                wikipedia: 'https://en.wikipedia.org/wiki/Allu_Arjun',
+                instagram: 'https://www.instagram.com/alluarjunonline/'
+            },
+            // Add more heroes here...
+
+            // Heroines
+            {
+                id: 11,
+                category: 'Heroines',
+                name: 'Samantha Akkineni',
+                firstMovie: 'Ye Maaya Chesave',
+                age: 34,
+                wikipedia: 'https://en.wikipedia.org/wiki/Samantha_Akkineni',
+                instagram: 'https://www.instagram.com/samantharuthprabhuoffl/'
+            },
+            {
+                id: 12,
+                category: 'Heroines',
+                name: 'Rashmika Mandanna',
+                firstMovie: 'Chalo',
+                age: 25,
+                wikipedia: 'https://en.wikipedia.org/wiki/Rashmika_Mandanna',
+                instagram: 'https://www.instagram.com/rashmika_mandanna/'
+            },
+            // Add more heroines here...
+
+            // Directors
+            {
+                id: 21,
+                category: 'Directors',
+                name: 'SS Rajamouli',
+                firstMovie: 'Student No. 1',
+                age: 48,
+                wikipedia: 'https://en.wikipedia.org/wiki/S._S._Rajamouli',
+                instagram: 'https://www.instagram.com/ssrajamouli/'
+            },
+            {
+                id: 22,
+                category: 'Directors',
+                name: 'Trivikram Srinivas',
+                firstMovie: 'Nuvve Nuvve',
+                age: 49,
+                wikipedia: 'https://en.wikipedia.org/wiki/Trivikram_Srinivas',
+                instagram: 'https://instagram.com/trivikramcelluloid?igshid=MzRlODBiNWFlZA=='
+            },
+            // Add more directors here...
+
+            // Comedians
+            {
+                id: 31,
+                category: 'Comedians',
+                name: 'Brahmanandam',
+                firstMovie: 'Aha Naa Pellanta',
+                age: 66,
+                wikipedia: 'https://en.wikipedia.org/wiki/Brahmanandam',
+                instagram: 'https://instagram.com/actorbrahmanandam?igshid=MzRlODBiNWFlZA=='
+            },
+            {
+                id: 32,
+                category: 'Comedians',
+                name: 'Vennela Kishore',
+                firstMovie: 'Vennela',
+                age: 40,
+                wikipedia: 'https://en.wikipedia.org/wiki/Vennela_Kishore',
+                instagram: 'https://www.instagram.com/vennelakish/'
+            },
+            // Add more comedians here...
+
+            // Add more artists here...
+            // Heroes
+            {
+                id: 3,
+                category: 'Heroes',
+                name: 'Nani',
+                firstMovie: 'Ashta Chamma',
+                age: 38,
+                wikipedia: 'https://en.wikipedia.org/wiki/Nani_(actor)',
+                instagram: 'https://instagram.com/nameisnani?igshid=MzRlODBiNWFlZA=='
+            },
+            {
+                id: 4,
+                category: 'Heroes',
+                name: 'Ram Charan',
+                firstMovie: 'Chirutha',
+                age: 36,
+                wikipedia: 'https://en.wikipedia.org/wiki/Ram_Charan',
+                instagram: 'https://www.instagram.com/alwaysramcharan/'
+            },
+            // Add more heroes here...
+
+            // Heroines
+            {
+                id: 13,
+                category: 'Heroines',
+                name: 'Kajal Aggarwal',
+                firstMovie: 'Lakshmi Kalyanam',
+                age: 36,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kajal_Aggarwal',
+                instagram: 'https://www.instagram.com/kajalaggarwalofficial/'
+            },
+            {
+                id: 14,
+                category: 'Heroines',
+                name: 'Tamannaah Bhatia',
+                firstMovie: 'Sri',
+                age: 31,
+                wikipedia: 'https://en.wikipedia.org/wiki/Tamannaah',
+                instagram: 'https://www.instagram.com/tamannaahspeaks/'
+            },
+            // Add more heroines here...
+
+           {
+                id: 41,
+                category: 'Heroes',
+                name: 'Priyadarshi',
+                firstMovie: 'Pelli Choopulu',
+                age: 33,
+                wikipedia: 'https://en.wikipedia.org/wiki/Priyadarshi_Pullela',
+                instagram: 'https://www.instagram.com/priyadarshi/'
+            },
+            {
+                id: 42,
+                category: 'Heroes',
+                name: 'Anudeep KV',
+                firstMovie: 'Jathi Ratnalu',
+                age: 29,
+                wikipedia: 'https://en.wikipedia.org/wiki/Anudeep_KV',
+                instagram: 'https://www.instagram.com/kv_anudeep/'
+            },
+            {
+                id: 43,
+                category: 'Heroes',
+                name: 'Navin Polishetty',
+                firstMovie: 'Agent Sai Srinivasa Athreya',
+                age: 34,
+                wikipedia: 'https://en.wikipedia.org/wiki/Navin_Polishetty',
+                instagram: 'https://www.instagram.com/navinpolishetty/'
+            },
+            {
+                id: 44,
+                category: 'Heroes',
+                name: 'Venu Madhav',
+                firstMovie: 'Sampradayam',
+                age: 49,
+                wikipedia: 'https://en.wikipedia.org/wiki/Venu_Madhav',
+                instagram: ''
+            },
+            {
+                id: 45,
+                category: 'Heroes',
+                name: 'Tharun Bhaskar',
+                firstMovie: 'Pelli Choopulu',
+                age: 34,
+                wikipedia: 'https://en.wikipedia.org/wiki/Tharun_Bhascker_Dhaassyam',
+                instagram: 'https://www.instagram.com/tharunbhasker/'
+            },
+            {
+                id: 46,
+                category: 'Heroes',
+                name: 'Rahul Ramakrishna',
+                firstMovie: 'Arjun Reddy',
+                age: 32,
+                wikipedia: 'https://en.wikipedia.org/wiki/Rahul_Ramakrishna',
+                instagram: 'https://www.instagram.com/saimadhurikolli/'
+            },
+            {
+                id: 47,
+                category: 'Heroes',
+                name: 'Vaishnav Tej',
+                firstMovie: 'Uppena',
+                age: 24,
+                wikipedia: 'https://en.wikipedia.org/wiki/Panja_Vaishnav_Tej',
+                instagram: 'https://www.instagram.com/vaishnavtej/'
+            },
+            {
+                id: 48,
+                category: 'Heroes',
+                name: 'Sai Dharam Tej',
+                firstMovie: 'Pilla Nuvvu Leni Jeevitham',
+                age: 35,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sai_Dharam_Tej',
+                instagram: 'https://www.instagram.com/jetpanja/'
+            },
+            {
+                id: 49,
+                category: 'Heroes',
+                name: 'Ravi Teja',
+                firstMovie: 'Karthavyam',
+                age: 54,
+                wikipedia: 'https://en.wikipedia.org/wiki/Ravi_Teja',
+                instagram: 'https://www.instagram.com/raviteja_2628/'
+            },
+            {
+                id: 50,
+                category: 'artist',
+                name: 'Suma Kanakala',
+                firstMovie: 'Meghasandesam',
+                age: 48,
+                wikipedia: 'https://en.wikipedia.org/wiki/Suma_Kanakala',
+                instagram: 'https://instagram.com/kanakalasuma?igshid=MzRlODBiNWFlZA=='
+            },
+            {
+                id: 51,
+                category: 'Heroines',
+                name: 'Krithi Shetty',
+                firstMovie: 'Uppena',
+                age: 18,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kriti_Shetty',
+                instagram: 'https://www.instagram.com/krithi.shetty_official/'
+            },
+            {
+                id: 52,
+                category: 'Heroines',
+                name: 'Ram Pothineni',
+                firstMovie: 'Devadasu',
+                age: 33,
+                wikipedia: 'https://en.wikipedia.org/wiki/Ram_Pothineni',
+                instagram: 'https://www.instagram.com/ram_pothineni/'
+            },
+            {
+                id: 53,
+                category: 'Heroines',
+                name: 'MS Narayan',
+                firstMovie: 'Mooru Guttu Ondu Sullu Ondu Nija',
+                age: 62,
+                wikipedia: 'https://en.wikipedia.org/wiki/M._S._Narayana',
+                instagram: ''
+            },
+            {
+                id: 54,
+                category: 'Heroines',
+                name: 'Bala Subramanyam',
+                firstMovie: 'Manmadhudu',
+                age: 55,
+                wikipedia: 'https://en.wikipedia.org/wiki/Bala_Subramaniam',
+                instagram: 'https://instagram.com/ispbofficial?igshid=MzRlODBiNWFlZA=='
+            },
+            {
+                id: 55,
+                category: 'Heroes',
+                name: 'Rana',
+                firstMovie: 'Leader',
+                age: 37,
+                wikipedia: 'https://en.wikipedia.org/wiki/Rana_Daggubati',
+                instagram: 'https://www.instagram.com/ranadaggubati/'
+            },
+            {
+                id: 56,
+                category: 'Heroes',
+                name: 'Pawan Kalyan',
+                firstMovie: 'Akkada Ammayi Ikkada Abbayi',
+                age: 50,
+                wikipedia: 'https://en.wikipedia.org/wiki/Pawan_Kalyan',
+                instagram: 'https://instagram.com/pawankalyan?igshid=MzRlODBiNWFlZA=='
+            },
+            {
+                id: 57,
+                category: 'Heroes',
+                name: 'Vishwak Sen',
+               firstMovie: 'Vellipomakey',
+                age: 26,
+                wikipedia: 'https://en.wikipedia.org/wiki/Vishwak_Sen',
+                instagram: 'https://www.instagram.com/vishwaksens/'
+            },
+            {
+                id: 58,
+                category: 'Heroes',
+                name: 'Karthi',
+                firstMovie: 'Paruthiveeran',
+                age: 44,
+                wikipedia: 'https://en.wikipedia.org/wiki/Karthi',
+                instagram: 'https://www.instagram.com/karthi_offl/'
+            },
+            {
+                id: 59,
+                category: 'Heroes',
+                name: 'Siddu Jonnalagadda',
+                firstMovie: 'Guntur Talkies',
+                age: 30,
+                wikipedia: 'https://en.wikipedia.org/wiki/Siddu_Jonnalagadda',
+                instagram: 'https://www.instagram.com/siddu_boy/'
+            },
+            {
+                id: 60,
+                category: 'Heroes',
+                name: 'Rajinikanth',
+                firstMovie: 'Apoorva Raagangal',
+                age: 71,
+                wikipedia: 'https://en.wikipedia.org/wiki/Rajinikanth',
+                instagram: 'https://instagram.com/rajinikanth?igshid=MzRlODBiNWFlZA=='
+            },
+            {
+                id: 61,
+                category: 'Heroes',
+                name: 'Vijay Thalapathy',
+                firstMovie: 'Naalaiya Theerpu',
+                age: 47,
+                wikipedia: 'https://en.wikipedia.org/wiki/Vijay_(actor)',
+                instagram: 'https://www.instagram.com/actorvijay/'
+            },
+            {
+                id: 62,
+                category: 'Heroines',
+                name: 'Pooja Hegde',
+                firstMovie: 'Mugamoodi',
+                age: 31,
+                wikipedia: 'https://en.wikipedia.org/wiki/Pooja_Hegde',
+                instagram: 'https://www.instagram.com/hegdepooja/'
+            },
+            {
+                id: 63,
+                category: 'Heroes',
+                name: 'Vijay Deverakonda',
+                firstMovie: 'Nuvvila',
+                age: 32,
+                wikipedia: 'https://en.wikipedia.org/wiki/Vijay_Deverakonda',
+                instagram: 'https://www.instagram.com/thedeverakonda/'
+            },
+            {
+                id: 64,
+                category: 'Heroines',
+                name: 'Anupama Parameswaran',
+                firstMovie: 'Premam',
+                age: 25,
+                wikipedia: 'https://en.wikipedia.org/wiki/Anupama_Parameswaran',
+                instagram: 'https://www.instagram.com/anupamaparameswaran96/'
+            },
+            {
+                id: 65,
+                category: 'Heroines',
+                name: 'Anu Emmanuel',
+                firstMovie: 'Swapna Sanchari',
+                age: 24,
+                wikipedia: 'https://en.wikipedia.org/wiki/Anu_Emmanuel',
+                instagram: 'https://www.instagram.com/anuemmanuel/'
+            },
+            {
+                id: 66,
+                category: 'Heroes',
+                name: 'Akhil Akkineni',
+                firstMovie: 'Akhil',
+                age: 27,
+                wikipedia: 'https://en.wikipedia.org/wiki/Akhil_Akkineni',
+                instagram: 'https://www.instagram.com/akkineniakhil/'
+            },
+            {
+                id: 67,
+                category: 'Heroes',
+                name: 'Chiranjeevi',
+                firstMovie: 'Punadhirallu',
+                age: 66,
+                wikipedia: 'https://en.wikipedia.org/wiki/Chiranjeevi',
+                instagram: 'https://www.instagram.com/chiranjeevikonidela/'
+            },
+            {
+                id: 68,
+                category: 'Heroes',
+                name: 'Prabhas',
+                firstMovie: 'Eeswar',
+                age: 42,
+                wikipedia: 'https://en.wikipedia.org/wiki/Prabhas',
+                instagram: 'https://www.instagram.com/actorprabhas/'
+            },
+            {
+                id: 69,
+                category: 'Heroes',
+                name: 'Dhanush',
+                firstMovie: 'Thulluvadho Ilamai',
+                age: 38,
+                wikipedia: 'https://en.wikipedia.org/wiki/Dhanush',
+                instagram: 'https://www.instagram.com/dhanushkraja/'
+            },
+            {
+                id: 70,
+                category: 'Heroines',
+                name: 'Shruti Haasan',
+                firstMovie: 'Hey Ram',
+                age: 35,
+                wikipedia: 'https://en.wikipedia.org/wiki/Shruti_Haasan',
+                instagram: 'https://www.instagram.com/shrutzhaasan/'
+            },
+            {
+                id: 71,
+                category: 'Heroines',
+                name: 'Kamal Haasan',
+                firstMovie: 'Kalathur Kannamma',
+                age: 67,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kamal_Haasan',
+                instagram: 'https://www.instagram.com/ikamalhaasan/'
+            },
+            {
+                id: 72,
+                category: 'Heroes',
+                name: 'Vikram',
+                firstMovie: 'En Kadhal Kanmani',
+                age: 55,
+                wikipedia: 'https://en.wikipedia.org/wiki/Vikram_(actor)',
+                instagram: 'https://www.instagram.com/the_real_chiyaan/'
+            },
+            {
+                id: 73,
+                category: 'Heroines',
+                name: 'Aishwarya Rai',
+                firstMovie: 'Iruvar',
+                age: 48,
+                wikipedia: 'https://en.wikipedia.org/wiki/Aishwarya_Rai_Bachchan',
+                instagram: 'https://www.instagram.com/aishwaryaraibachchan_arb/'
+            },
+            {
+                id: 74,
+                category: 'Directors',
+                name: 'Sreekanth Addala',
+                firstMovie: 'Kotha Bangaru Lokam',
+                age: 47,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sreekanth_Addala',
+                instagram: 'https://instagram.com/srikanthaddalaoffl?igshid=MzRlODBiNWFlZA=='
+            },
+            {
+                id: 75,
+                category: 'Heroines',
+                name: 'Sai Pallavi',
+                firstMovie: 'Premam',
+                age: 29,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sai_Pallavi',
+                instagram: 'https://www.instagram.com/saipallavi.senthamarai/'
+            },
+            {
+                id: 76,
+                category: 'Heroes',
+                name: 'Naga Chaitanya',
+                firstMovie: 'Josh',
+                age: 35,
+                wikipedia: 'https://en.wikipedia.org/wiki/Naga_Chaitanya',
+                instagram: 'https://www.instagram.com/chayakkineni/'
+            },
+           {
+               id: 76,
+                category: 'Heroes',
+                name: 'ranjith',
+                firstMovie: 'Josh',
+                age: 35,
+                wikipedia: 'null',
+                instagram: 'https://instagram.com/ranjith_munjam_?igshid=MmIzYWVlNDQ5Yg=='
+           },
+           {
+                id: 216,
+                category: 'Heroes',
+                name: 'Akkineni Nageswara Rao',
+                firstMovie: 'Dharmapatni',
+                age: 91,
+                wikipedia: 'https://en.wikipedia.org/wiki/Akkineni_Nageswara_Rao',
+                instagram: ''
+
+           },
+           {
+               id: 253,
+                category: 'Comedians',
+                name: 'Srinivasa Reddy',
+                firstMovie: 'Ishtam',
+                age: 48,
+                wikipedia: 'https://en.wikipedia.org/wiki/Srinivasa_Reddy',
+                instagram: 'https://www.instagram.com/srinivasareddy.official/'
+            },
+            {
+                id: 252,
+                category: 'Comedians',
+                name: 'Siva Reddy',
+                firstMovie: 'Ninne Pelladatha',
+                age: 59,
+                wikipedia: 'https://en.wikipedia.org/wiki/Siva_Reddy',
+                instagram: 'https://www.instagram.com/ishivareddy/?hl=en'
+            },
+            {
+                 id: 250,
+                category: 'Other Artists',
+                name: 'Rathna Shekar Reddy',
+                firstMovie: 'Gharana Bullodu',
+                age: 49,
+                wikipedia: '',
+                instagram: ''
+            },
+            {
+
+                id: 51,
+                category: 'Music composer',
+                name: 'Anirudh Ravichander',
+                firstMovie: '3',
+                age: 31,
+                wikipedia: 'https://en.wikipedia.org/wiki/Anirudh_Ravichander',
+                instagram: 'https://www.instagram.com/anirudhofficial/'
+            },
+            {
+                id: 53,
+                category: 'Hero',
+                name: 'Kiran Abbavaram',
+                firstMovie: 'Raja Vaaru Rani Gaaru',
+                age: 27,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kiran_Abbavaram',
+                instagram: 'https://www.instagram.com/kiran_abbavaram/'
+            },
+            {
+                id: 54,
+                category: 'Actor',
+                name: 'Achyuth',
+                firstMovie: 'Pelli Choopulu',
+                age: 30,
+                wikipedia: 'https://en.wikipedia.org/wiki/Achyuth_Kumar',
+                instagram: ''
+            },
+            {
+                id: 58,
+                category: 'Actor',
+                name: 'Srinivas Avasarala',
+                firstMovie: 'Ashta Chamma',
+                age: 42,
+                wikipedia: 'https://en.wikipedia.org/wiki/Srinivas_Avasarala',
+                instagram: 'https://www.instagram.com/avasaralasrinivas/'
+            },
+            {
+                id: 59,
+                category: 'Actor',
+                name: 'Ananth Babu',
+                firstMovie: 'Premayanamaha',
+                age: 52,
+                wikipedia: 'https://en.m.wikipedia.org/wiki/Ananth_Babu',
+                instagram: ''
+            },
+            {
+                id: 60,
+                category: 'Hero',
+                name: 'Ashwin Babu',
+                firstMovie: 'Chandamama Kathalu',
+                age: 34,
+                wikipedia: 'https://en.m.wikipedia.org/wiki/Ashwin_Babu',
+                instagram: 'https://www.instagram.com/ashwinbabuactor/'
+            },
+            {
+                id: 63,
+                category: 'Heroes',
+                name: 'Mohan Babu',
+                firstMovie: 'Swargam Narakam',
+                age: 71,
+                wikipedia: 'https://en.wikipedia.org/wiki/Mohan_Babu',
+                instagram: ''
+            },
+            {
+                id: 64,
+                category: 'Comedians',
+                name: 'Prasad Babu',
+                firstMovie: 'Mantri Gari Viyyankudu',
+                age: 58,
+                wikipedia: 'https://en.wikipedia.org/wiki/Prasad_Babu',
+                instagram: ''
+            },
+            {
+                id: 65,
+                category: 'Comedians',
+                name: 'Puvvula Suri Babu',
+                firstMovie: 'Pilla Zamindar',
+                age: 44,
+                wikipedia: 'https://en.wikipedia.org/wiki/Puvvula_Suri_Babu',
+                instagram: ''
+            },
+            {
+                id: 66,
+                category: 'Comedians',
+                name: 'Raghu Babu',
+                firstMovie: 'Ee Abbai Chala Manchodu',
+                age: 57,
+                wikipedia: 'https://en.wikipedia.org/wiki/Raghu_Babu',
+                instagram: ''
+            },
+            {
+                id: 67,
+                category: 'Heroes',
+                name: 'Raja Babu (actor)',
+                firstMovie: 'Nirnayam',
+                age: 59,
+                wikipedia: 'https://en.wikipedia.org/wiki/Raja_Babu_(actor)',
+                instagram: ''
+            },
+            {
+                id: 68,
+                category: 'Other Artists',
+                name: 'Ramesh Babu',
+                firstMovie: 'Bhakta Prahlada',
+                age: 77,
+                wikipedia: 'https://en.wikipedia.org/wiki/Ramesh_Babu',
+                instagram: ''
+            },
+            {
+                id: 69,
+                category: 'Other Artists',
+                name: 'Ravi Babu',
+                firstMovie: 'Allari',
+                age: 53,
+                wikipedia: 'https://en.wikipedia.org/wiki/Ravi_Babu',
+                instagram: ''
+            },
+            {
+                id: 70,
+                category: 'Heroes',
+                name: 'Sudheer Babu',
+                firstMovie: 'SMS (Siva Manasulo Sruthi)',
+                age: 41,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sudheer_Babu',
+                instagram: 'https://www.instagram.com/isudheerbabu/'
+            },
+            {
+                id: 71,
+                category: 'Heroes',
+                name: 'Baladitya (actor)',
+                firstMovie: 'Akkada Ammayi Ikkada Abbayi',
+                age: 42,
+                wikipedia: 'https://en.wikipedia.org/wiki/Baladitya_(actor)',
+                instagram: 'https://www.instagram.com/aham_balaaditya/'
+            },
+            {
+                id: 72,
+                category: 'Other Artists',
+                name: 'Akul Balaji',
+                firstMovie: 'Dhumm',
+                age: 41,
+                wikipedia: 'https://en.wikipedia.org/wiki/Akul_Balaji',
+                instagram: 'https://www.instagram.com/akulbalaji/'
+            },
+            {
+                id: 73,
+                category: 'Heroes',
+                name: 'Siva Balaji',
+                firstMovie: 'Idi Maa Ashokgadi Love Story',
+                age: 41,
+                wikipedia: 'https://en.wikipedia.org/wiki/Siva_Balaji',
+                instagram: 'https://www.instagram.com/sivabalajiactor/'
+            },
+            {
+                id: 74,
+                category: 'Other Artists',
+                name: 'Aadarsh Balakrishna',
+                firstMovie: 'Happy',
+                age: 37,
+                wikipedia: 'https://en.wikipedia.org/wiki/Aadarsh_Balakrishna',
+                instagram: 'https://www.instagram.com/aadarshbalakrishna/'
+            },
+            {
+                id: 75,
+                category: 'Heroes',
+                name: 'Nandamuri Balakrishna',
+                firstMovie: 'Tatamma Kala',
+                age: 61,
+                wikipedia: 'https://en.wikipedia.org/wiki/Nandamuri_Balakrishna',
+                instagram: 'https://www.instagram.com/balayyababu_official/'
+            },
+            {
+                id: 76,
+                category: 'Other Artists',
+                name: 'Valluri Balakrishna',
+                firstMovie: 'Inti Guttu',
+                age: 61,
+                wikipedia: 'https://en.wikipedia.org/wiki/Valluri_Balakrishna',
+                instagram: ''
+            },
+            {
+                id: 78,
+                category: 'Other Artists',
+                name: 'Jagadeesh Prathap Bandari',
+                firstMovie: 'Bachelor Boys',
+                age: 37,
+                wikipedia: 'https://en.wikipedia.org/wiki/Jagadeesh_Prathap_Bandari',
+                instagram: 'https://www.instagram.com/og_jagadeesh_prathap/'
+            },
+            {
+                id: 79,
+                category: 'Comedians',
+                name: 'Banerjee (actor)',
+                firstMovie: 'Leader',
+                age: 48,
+                wikipedia: 'https://en.wikipedia.org/wiki/Banerjee_(actor)',
+                instagram: ''
+            },
+            {
+                id: 80,
+                category: 'Heroes',
+                name: 'Bellamkonda Sreenivas',
+                firstMovie: 'Alludu Seenu',
+                age: 28,
+                wikipedia: 'https://en.wikipedia.org/wiki/Bellamkonda_Sreenivas',
+                instagram: 'https://www.instagram.com/sreenivasbellamkonda/'
+            },
+            {
+                id: 81,
+                category: 'Other Artists',
+                name: 'Master Bharath',
+                firstMovie: 'Bommarillu',
+                age: 28,
+                wikipedia: 'https://en.wikipedia.org/wiki/Master_Bharath',
+                instagram: ''
+            },
+            {
+                id: 82,
+                category: 'Other Artists',
+                name: 'Brahmaji',
+                firstMovie: 'Rakshasudu',
+                age: 53,
+                wikipedia: 'https://en.wikipedia.org/wiki/Brahmaji',
+                instagram: 'https://www.instagram.com/brammakadali/'
+            },
+            {
+                id: 84,
+                category: 'Other Artists',
+                name: 'Prince Cecil',
+                firstMovie: 'Neeku Naaku Dash Dash',
+                age: 29,
+                wikipedia: 'https://en.wikipedia.org/wiki/Prince_Cecil',
+                instagram: 'https://www.instagram.com/princececil3/'
+            },
+            {
+                id: 85,
+                category: 'Other Artists',
+                name: 'Laksh Chadalavada',
+                firstMovie: 'C/o Kancharapalem',
+                age: 27,
+                wikipedia: 'https://lookoutinfo.com/laksh-chadalavada-wiki-age-biography/',
+                instagram: 'https://www.instagram.com/itsactorlaksh/?hl=en'
+            },
+            {
+                id: 87,
+                category: 'Other Artists',
+                name: 'Chakrapani Ananda',
+                firstMovie: 'Bhamane Satyabhamane',
+                age: 44,
+                wikipedia: 'https://en.wikipedia.org/wiki/Chakrapani_Ananda',
+                instagram: 'https://www.instagram.com/actor_chakrapani/'
+            },
+            {
+                id: 88,
+                category: 'Other Artists',
+                name: 'J. D. Chakravarthy',
+                firstMovie: 'Siva',
+                age: 52,
+                wikipedia: 'https://en.wikipedia.org/wiki/J._D._Chakravarthy',
+                instagram: ''
+            },
+            {
+                id: 89,
+                category: 'Comedians',
+                name: 'Chalam (actor)',
+                firstMovie: 'Sobhan Babu',
+                age: 48,
+                wikipedia: 'https://en.wikipedia.org/wiki/Chalam_(actor)',
+                instagram: ''
+            },
+            {
+                id: 90,
+                category: 'Other Artists',
+                name: 'Sai Chand',
+                firstMovie: 'Swathi Kiranam',
+                age: 58,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sai_Chand',
+                instagram: ''
+            },
+            {
+                id: 91,
+                category: 'Other Artists',
+                name: 'Bhuvana Chandra',
+                firstMovie: 'Nireekshana',
+                age: 72,
+                wikipedia: 'https://en.wikipedia.org/wiki/Bhuvana_Chandra',
+                instagram: ''
+            },
+            {
+                id: 92,
+                category: 'Other Artists',
+                name: 'Naveen Chandra',
+                firstMovie: 'Andala Rakshasi',
+                age: 33,
+                wikipedia: 'https://en.wikipedia.org/wiki/Naveen_Chandra',
+                instagram: 'https://www.instagram.com/naveenchandra212/'
+            },
+            {
+                id: 94,
+                category: 'Other Artists',
+                name: 'Charandeep',
+                firstMovie: 'Arya 2',
+                age: 37,
+                wikipedia: 'https://en.wikipedia.org/wiki/Charandeep',
+                instagram: ''
+            },
+            {
+                id: 101,
+                category: 'Other Artists',
+                name: 'Kireeti Damaraju',
+                firstMovie: 'Second Hand',
+                age: 31,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kireeti_Damaraju',
+                instagram: 'https://www.instagram.com/kireetid/'
+            },
+            {
+                id: 102,
+                category: 'Other Artists',
+                name: 'Anand Deverakonda',
+                firstMovie: 'Dorasani',
+                age: 26,
+                wikipedia: 'https://en.wikipedia.org/wiki/Anand_Deverakonda',
+                instagram: 'https://www.instagram.com/ananddeverakonda/'
+            },
+            {
+                id: 104,
+                category: 'Comedians',
+                name: 'Dhanraj (actor)',
+                firstMovie: 'Adirindayya Chandram',
+                age: 42,
+                wikipedia: 'https://en.wikipedia.org/wiki/Dhanraj_(actor)',
+                instagram: 'https://www.instagram.com/actorsudheerraj/'
+            },
+            {
+                id: 105,
+                category: 'Heroes',
+                name: 'Kalyaan Dhev',
+                firstMovie: 'Vijetha',
+                age: 24,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kalyaan_Dhev',
+                instagram: 'https://www.instagram.com/kalyaan_dhev/'
+            },
+            {
+                id: 106,
+                category: 'Other Artists',
+                name: 'Viswant Duddumpudi',
+                firstMovie: 'Kerintha',
+                age: 27,
+                wikipedia: 'https://en.wikipedia.org/wiki/Viswant_Duddumpudi',
+                instagram: 'https://www.instagram.com/viswants/'
+            },
+            {
+                id: 108,
+                category: 'Comedians',
+                name: 'Bandla Ganesh',
+                firstMovie: 'Anjaneyulu',
+                age: 50,
+                wikipedia: 'https://en.wikipedia.org/wiki/Bandla_Ganesh',
+                instagram: 'https://www.instagram.com/ganeshbandla/'
+            },
+            {
+                id: 109,
+                category: 'Comedians',
+                name: 'Ajay Ghosh',
+                firstMovie: 'Temper',
+                age: 39,
+                wikipedia: 'https://en.wikipedia.org/wiki/Ajay_Ghosh',
+                instagram: 'https://www.instagram.com/ajay_ghosh_act/'
+            },
+            {
+                id: 110,
+                category: 'Other Artists',
+                name: 'Abhinav Gomatam',
+                firstMovie: 'Ee Nagaraniki Emaindi',
+                age: 27,
+                wikipedia: 'https://en.wikipedia.org/wiki/Abhinav_Gomatam',
+                instagram: 'https://www.instagram.com/abhinav_gomatam/'
+            },
+            {
+                id: 111,
+                category: 'Heroes',
+                name: 'Gopichand',
+                firstMovie: 'Tholi Valapu',
+                age: 43,
+                wikipedia: 'https://en.wikipedia.org/wiki/Gopichand_(actor)',
+                instagram: 'https://www.instagram.com/yoursgopichand/'
+            },
+            {
+                id: 115,
+                category: 'Heroes',
+                name: 'Kartikeya Gummakonda',
+                firstMovie: 'RX 100',
+                age: 29,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kartikeya_Gummakonda',
+                instagram: 'https://www.instagram.com/actorkartikeya/'
+            },
+            {
+                id: 130,
+                category: 'Heroes',
+                name: 'Sundeep Kishan',
+                firstMovie: 'Prasthanam',
+                age: 34,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sundeep_Kishan',
+                instagram: 'https://www.instagram.com/sundeepkishan/'
+            },
+            {
+                id: 131,
+                category: 'Other Artists',
+                name: 'Sudhakar Komakula',
+                firstMovie: 'Life Before Wedding',
+                age: 33,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sudhakar_Komakula',
+                instagram: 'https://www.instagram.com/sudhakar_komakula/'
+            },
+            {
+                id: 166,
+                category: 'Heroes',
+                name: 'Nagarjuna (actor)',
+                firstMovie: 'Vikram',
+                age: 62,
+                wikipedia: 'https://en.wikipedia.org/wiki/Nagarjuna_(actor)',
+                instagram: 'https://www.instagram.com/akkineni__nagarjuna/'
+            },
+            {
+                id: 150,
+                category: 'Heroes',
+                name: 'Vishnu Manchu',
+                firstMovie: 'Vishnu',
+                age: 40,
+                wikipedia: 'https://en.wikipedia.org/wiki/Vishnu_Manchu',
+                instagram: 'https://www.instagram.com/vishnumanchu/'
+            },
+            {
+                id: 145,
+                category: 'Other Artists',
+                name: 'Pradeep Machiraju',
+                firstMovie: '30 Rojullo Preminchadam Ela',
+                age: 36,
+                wikipedia: 'https://en.wikipedia.org/wiki/Pradeep_Machiraju',
+                instagram: 'https://www.instagram.com/pradeep_machiraju/'
+            },
+            {
+                id: 174,
+                category: 'Other Artists',
+                name: 'Navdeep',
+                firstMovie: 'Jai',
+                age: 35,
+                wikipedia: 'https://en.wikipedia.org/wiki/Navdeep',
+                instagram: 'https://www.instagram.com/pnavdeep/'
+            },
+            {
+                id: 206,
+                category: 'Heroes',
+                name: 'Nandamuri Kalyan Ram',
+                firstMovie: 'Toli Choopulone',
+                age: 43,
+                wikipedia: 'https://en.wikipedia.org/wiki/Nandamuri_Kalyan_Ram',
+                instagram: 'https://www.instagram.com/nandamurikalyanram/'
+            },
+            {
+                id: 201,
+                category: 'Heroes',
+                name: 'Krishnam Raju',
+                firstMovie: 'Chilaka Gorinka',
+                age: 81,
+                wikipedia: 'https://en.wikipedia.org/wiki/Krishnam_Raju',
+                instagram: ''
+            },
+            {
+                id: 178,
+                category: 'Other Artists',
+                name: 'Aadhi Pinisetty',
+                firstMovie: 'Oka V Chitram',
+                age: 38,
+                wikipedia: 'https://en.wikipedia.org/wiki/Aadhi_Pinisetty',
+                instagram: 'https://www.instagram.com/aadhi_official/'
+            },
+            {
+                id: 175,
+                category: 'Heroes',
+                name: 'Nithiin',
+                firstMovie: 'Jayam',
+                age: 38,
+                wikipedia: 'https://en.wikipedia.org/wiki/Nithiin',
+                instagram: 'https://www.instagram.com/actor_nithiin/'
+            }
+
+        ];
+
+        function renderArtists(filteredArtists) {
+            const artistsContainer = document.getElementById('artistsContainer');
+            const notFoundMessage = document.getElementById('notFoundMessage');
+
+            artistsContainer.innerHTML = '';
+            notFoundMessage.style.display = 'none';
+
+            if (filteredArtists.length === 0) {
+                notFoundMessage.style.display = 'block';
+            } else {
+                filteredArtists.forEach(artist => {
+                    const artistDiv = document.createElement('div');
+                    artistDiv.classList.add('artist-profile', 'show'); // Add "show" class to display the profiles
+                    artistDiv.innerHTML = `
+                        <h3>${artist.name}</h3>
+                        <p>Category: ${artist.category}</p>
+                        <p>First Movie: ${artist.firstMovie}</p>
+                        <p>Age: ${artist.age}</p>
+                        <p><a href="${artist.wikipedia}" target="_blank">Wikipedia</a></p>
+                        <p>${artist.instagram ? `Instagram: <a href="${artist.instagram}" target="_blank">${artist.instagram}</a>` : 'Instagram: N/A'}</p>
+                        <hr>
+                    `;
+                    artistsContainer.appendChild(artistDiv);
+                });
+            }
+        }
+
+        function searchData() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredArtists = artists.filter(artist => {
+                const name = artist.name.toLowerCase();
+                return name.includes(searchTerm);
+            });
+            renderArtists(filteredArtists);
+        }
+    </script>
+</body>
+</html>
