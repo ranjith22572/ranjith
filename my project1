@@ -1,0 +1,260 @@
+<html>
+<head>
+    <title>telugu flim industry dashboard</title>
+    <style>
+        /* CSS styles */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #searchButton {
+            padding: 10px 20px;
+            margin-left: 10px;
+        }
+
+        #artistsContainer {
+            margin-top: 20px;
+        }
+
+        .artist-profile {
+            margin-bottom: 20px;
+            display: none; /* Initially hide the profiles */
+        }
+
+        .artist-profile.show {
+            display: block; /* Display the profiles when shown */
+        }
+
+        .artist-profile h3 {
+            margin-bottom: 5px;
+        }
+
+        .artist-profile p {
+            margin: 0;
+        }
+
+        .artist-profile a {
+            color: #0366d6;
+        }
+
+        #notFoundMessage {
+            display: none; /* Initially hide the "Data not found" message */
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Telugu Film Industry Dashboard</h1>
+        <div>
+            <input type="text" id="searchInput" placeholder="Search artists">
+            <button id="searchButton" onclick="searchData()">Search</button>
+        </div>
+        <div id="artistsContainer"></div>
+        <p id="notFoundMessage">Data not found</p>
+    </div>
+
+    <script>
+        // JavaScript code
+        const artists = [
+            // Heroes
+
+                category: 'Other Artists',
+                name: 'Charandeep',
+                firstMovie: 'Arya 2',
+                age: 37,
+                wikipedia: 'https://en.wikipedia.org/wiki/Charandeep',
+                instagram: ''
+            },
+            {
+                id: 101,
+                category: 'Other Artists',
+                name: 'Kireeti Damaraju',
+                firstMovie: 'Second Hand',
+                age: 31,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kireeti_Damaraju',
+                instagram: 'https://www.instagram.com/kireetid/'
+            },
+            {
+                id: 102,
+                category: 'Other Artists',
+                name: 'Anand Deverakonda',
+                firstMovie: 'Dorasani',
+                age: 26,
+                wikipedia: 'https://en.wikipedia.org/wiki/Anand_Deverakonda',
+                instagram: 'https://www.instagram.com/ananddeverakonda/'
+            },
+            {
+                id: 104,
+                category: 'Comedians',
+                name: 'Dhanraj (actor)',
+                firstMovie: 'Adirindayya Chandram',
+                age: 42,
+                wikipedia: 'https://en.wikipedia.org/wiki/Dhanraj_(actor)',
+                instagram: 'https://www.instagram.com/actorsudheerraj/'
+            },
+            {
+                id: 105,
+                category: 'Heroes',
+                name: 'Kalyaan Dhev',
+                firstMovie: 'Vijetha',
+                age: 24,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kalyaan_Dhev',
+                instagram: 'https://www.instagram.com/kalyaan_dhev/'
+            },
+            {
+                id: 106,
+                category: 'Other Artists',
+                name: 'Viswant Duddumpudi',
+                firstMovie: 'Kerintha',
+                age: 27,
+                wikipedia: 'https://en.wikipedia.org/wiki/Viswant_Duddumpudi',
+                instagram: 'https://www.instagram.com/viswants/'
+            },
+            {
+                id: 108,
+                category: 'Comedians',
+                name: 'Bandla Ganesh',
+                firstMovie: 'Anjaneyulu',
+                age: 50,
+                wikipedia: 'https://en.wikipedia.org/wiki/Bandla_Ganesh',
+                instagram: 'https://www.instagram.com/ganeshbandla/'
+            },
+            {
+                id: 109,
+                category: 'Comedians',
+                name: 'Ajay Ghosh',
+                firstMovie: 'Temper',
+                age: 39,
+                wikipedia: 'https://en.wikipedia.org/wiki/Ajay_Ghosh',
+                instagram: 'https://www.instagram.com/ajay_ghosh_act/'
+            },
+            {
+                id: 110,
+                category: 'Other Artists',
+                name: 'Abhinav Gomatam',
+                firstMovie: 'Ee Nagaraniki Emaindi',
+                age: 27,
+                wikipedia: 'https://en.wikipedia.org/wiki/Abhinav_Gomatam',
+                instagram: 'https://www.instagram.com/abhinav_gomatam/'
+            },
+            {
+                id: 111,
+                category: 'Heroes',
+                name: 'Gopichand',
+                firstMovie: 'Tholi Valapu',
+                age: 43,
+                wikipedia: 'https://en.wikipedia.org/wiki/Gopichand_(actor)',
+                instagram: 'https://www.instagram.com/yoursgopichand/'
+            },
+            {
+                id: 115,
+                category: 'Heroes',
+                name: 'Kartikeya Gummakonda',
+                firstMovie: 'RX 100',
+                age: 29,
+                wikipedia: 'https://en.wikipedia.org/wiki/Kartikeya_Gummakonda',
+                instagram: 'https://www.instagram.com/actorkartikeya/'
+            },
+            {
+                id: 130,
+                category: 'Heroes',
+                name: 'Sundeep Kishan',
+                firstMovie: 'Prasthanam',
+                age: 34,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sundeep_Kishan',
+                instagram: 'https://www.instagram.com/sundeepkishan/'
+            },
+            {
+                id: 131,
+                category: 'Other Artists',
+                name: 'Sudhakar Komakula',
+                firstMovie: 'Life Before Wedding',
+                age: 33,
+                wikipedia: 'https://en.wikipedia.org/wiki/Sudhakar_Komakula',
+                instagram: 'https://www.instagram.com/sudhakar_komakula/'
+            },
+            {
+                id: 166,
+                category: 'Heroes',
+                name: 'Nagarjuna (actor)',
+                firstMovie: 'Vikram',
+                age: 62,
+                wikipedia: 'https://en.wikipedia.org/wiki/Nagarjuna_(actor)',
+                instagram: 'https://www.instagram.com/akkineni__nagarjuna/'
+            },
+            {
+                id: 150,
+                category: 'Heroes',
+                name: 'Vishnu Manchu',
+                firstMovie: 'Vishnu',
+                age: 40,
+                wikipedia: 'https://en.wikipedia.org/wiki/Vishnu_Manchu',
+                instagram: 'https://www.instagram.com/vishnumanchu/'
+            },
+            {
+                id: 175,
+                category: 'Heroes',
+                name: 'Nithiin',
+                firstMovie: 'Jayam',
+                age: 38,
+                wikipedia: 'https://en.wikipedia.org/wiki/Nithiin',
+                instagram: 'https://www.instagram.com/actor_nithiin/'
+            }
+
+        ];
+
+        function renderArtists(filteredArtists) {
+            const artistsContainer = document.getElementById('artistsContainer');
+            const notFoundMessage = document.getElementById('notFoundMessage');
+
+            artistsContainer.innerHTML = '';
+            notFoundMessage.style.display = 'none';
+
+            if (filteredArtists.length === 0) {
+                notFoundMessage.style.display = 'block';
+            } else {
+                filteredArtists.forEach(artist => {
+                    const artistDiv = document.createElement('div');
+                    artistDiv.classList.add('artist-profile', 'show'); // Add "show" class to display the profiles
+                    artistDiv.innerHTML = `
+                        <h3>${artist.name}</h3>
+                        <p>Category: ${artist.category}</p>
+                        <p>First Movie: ${artist.firstMovie}</p>
+                        <p>Age: ${artist.age}</p>
+                        <p><a href="${artist.wikipedia}" target="_blank">Wikipedia</a></p>
+                        <p>${artist.instagram ? `Instagram: <a href="${artist.instagram}" target="_blank">${artist.instagram}</a>` : 'Instagram: N/A'}</p>
+                        <hr>
+                    `;
+                    artistsContainer.appendChild(artistDiv);
+                });
+            }
+        }
+
+        function searchData() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredArtists = artists.filter(artist => {
+                const name = artist.name.toLowerCase();
+                return name.includes(searchTerm);
+            });
+            renderArtists(filteredArtists);
+        }
+    </script>
+</body>
+</html>
